@@ -26,10 +26,10 @@ public class Sterowanie  implements ComponentListener{
 	public int level=1;
 	public Sterowanie() {
 		f=new JFrame();
-		f.setSize(100,100);
+		f.setSize(200,200);
 		start=new Start(this);
 		//s=new JPanel();
-		//f.add(start);
+		f.add(start);
 		
 		//board=new Board(f,this);
 		//f.add(kontener);
@@ -37,8 +37,8 @@ public class Sterowanie  implements ComponentListener{
 		board=new Board(f,this);
 		board.setVisible(false);
 		//
-		start=board;
-		f.add(board);
+		//start=board;
+		//f.add(board);
 	//	f.add(start);
 		f.setVisible(true);
 		f.addComponentListener(this);
@@ -55,13 +55,15 @@ public class Sterowanie  implements ComponentListener{
 	}
 	public void gra()
 	{
-		f.getContentPane().removeAll();
-		f.getContentPane().add(board);
-		f.getContentPane().addKeyListener(board);
+		//f.getContentPane().removeAll();
+		//f.getContentPane().add(board);
+		//f.getContentPane().addKeyListener(board);
 		//f.add(start);
 		//board=new Board(f,this);
-		//f.remove(start);
-		//f.add(board);
+		start.setVisible(false);
+		board.setVisible(true);
+		f.remove(start);
+		f.add(board);
 		//start.setVisible(false);
 		
 		
