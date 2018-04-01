@@ -21,54 +21,46 @@ public class Sterowanie  implements ComponentListener{
 	JButton wyniki;
 	public JPanel kontener;
     Container contentPane;
+  //  String plansza;//="plansza.txt";
 
 	
-	public int level=1;
+	public int level=0;
 	public Sterowanie() {
+		//plansza=Wczytywanie.get_plansza_name(0);
 		f=new JFrame();
 		f.setSize(200,200);
 		start=new Start(this);
-		//s=new JPanel();
 		f.add(start);
+		f.setVisible(true);
 		
-		//board=new Board(f,this);
-		//f.add(kontener);
-		//f.add(contentPane.add(start));
 		board=new Board(f,this);
 		board.setVisible(false);
-		//
-		//start=board;
-		//f.add(board);
-	//	f.add(start);
-		f.setVisible(true);
+		
+		
 		f.addComponentListener(this);
-	//	f.addKeyListener();
-		f.addKeyListener(board);
+		f.addKeyListener(board.pilka);
 		f.setLocation(100, 100);
-		//this.gra();
-		//gra();
 		board.setVisible(true);
 		   f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		System.out.print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"+level+"           ");
-	//	System.gc();
+	
 		
 	}
+	
 	public void gra()
 	{
-		//f.getContentPane().removeAll();
-		//f.getContentPane().add(board);
-		//f.getContentPane().addKeyListener(board);
-		//f.add(start);
-		//board=new Board(f,this);
+		
+		f.requestFocus();
 		start.setVisible(false);
 		board.setVisible(true);
-		f.remove(start);
+		board.czas=System.currentTimeMillis();
 		f.add(board);
 		//start.setVisible(false);
 		
 		
-		System.out.print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"+level );  
+		//System.out.print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"+level );  
 	}
+	
+	
 	@Override
 	public void componentHidden(ComponentEvent arg0) {
 		// TODO Auto-generated method stub
@@ -84,7 +76,10 @@ public class Sterowanie  implements ComponentListener{
 		// TODO Auto-generated method stub
 		board.dlugosc=f.getHeight();
 		board.szerokosc=f.getWidth();
+		//start.start.resize((int)(f.getHeight()/7),(int)(f.getWidth()/5 ));
+		//start.start.setSize((int)f.getWidth()/5,(int)f.getHeight()/5);;
 		
+		//start.setBounds(20, 20, 20, 20);
 		//System.out.print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 		
 	}

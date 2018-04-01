@@ -1,14 +1,20 @@
 package kulka;
 
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
-public class Pilka implements KeyListener{
+import javax.swing.JPanel;
+import javax.swing.RepaintManager;
 
-	public float dx,dy;
+public class Pilka implements KeyListener{
+	Wczytywanie czytaj;
+
+	public float dx,dy= 0.01f;
 	public float pilka_x=0;
 	public float pilka_y=0;
+	int zycia;
 	public float r=0.1f;
 	//public float size_y=0.1f;
 	BufferedImage image;
@@ -16,16 +22,24 @@ public class Pilka implements KeyListener{
 	
 	
 	Pilka(){
+		image=Wczytywanie.get_pilka_image("image");
 		pilka_x=Wczytywanie.get_pilka("x");
 		pilka_y=Wczytywanie.get_pilka("y");
+		zycia=(int)Wczytywanie.get_pilka("zycia");
 		r=Wczytywanie.get_pilka("r");
 	}
+	
+
+	
 	
 	
 	public void move() {
 		pilka_x+=dx;
 		pilka_y+=dy;
 	}
+	
+	
+	
 	
 	@Override
 	public void keyPressed(KeyEvent evt) {
@@ -40,7 +54,7 @@ public class Pilka implements KeyListener{
         if (key == KeyEvent.VK_RIGHT) {
             dx = (float) 0.01;
         }
-
+      
         if (key == KeyEvent.VK_UP) {
             dy = (float)-0.01;
         }
