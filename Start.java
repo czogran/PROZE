@@ -4,9 +4,12 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Rectangle;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,9 +31,14 @@ JButton zasady;
 JButton wyniki;
 JButton nick;
 TextArea tekst;
-String nick_gracza="gosc";
+public static String nick_gracza="gosc";
 int x=91;
 int y=20;
+
+/**
+ * sluzy do obslugi poczatka gry
+ * @param s to nazwa klasy sterowanie na rzecz ktorej bedziemy wywolywac elemnty, wczytywac nick itp
+ */
 
 	Start(Sterowanie s){
 		start=new JButton("START");
@@ -46,7 +54,7 @@ int y=20;
 		this.add(zasady);
 		this.add(wyniki);
 		this.add(nick);
-		
+	
 		
 		
 		start.addActionListener(new ActionListener() {
@@ -55,7 +63,7 @@ int y=20;
 				// TODO Auto-generated method stub
 				s.level=11;
 				
-			     JOptionPane.showMessageDialog(s.f.getComponent(0), "Hello World");
+			    // JOptionPane.showMessageDialog(s.f.getComponent(0), "Hello World");
 				s.gra();
 				start.setSize(x++,y++);
 				System.out.println("Do Something Clicked");
@@ -92,7 +100,7 @@ int y=20;
 				f.add(j);
 				//f.add(nameField);
 				f.setVisible(true); 
-				f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
+				//f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
 				ok.addActionListener(new ActionListener() {
 					 
 					@Override
@@ -104,26 +112,23 @@ int y=20;
 					}
 				});
 				
-			
-					
-				
-				
 			}
 		});
-		//ComponentListener arg0;
-	//	start.addComponentListener(arg0);
-		
-		
-		
-	}
 	
-	public void rozmiar()
-	{
+		wyniki.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+				Wyniki w=new Wyniki();
+			}
 		
-		//start.addComponentListener(arg0);
-		//start.resize(arg0);
-		//start.setBounds(20, 20, 20, 20);
+		});
+		
 	}
 
+
 	
+
 }

@@ -7,32 +7,41 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 import javax.swing.RepaintManager;
+import javax.xml.crypto.Data;
 
-public class Pilka implements KeyListener{
-	Wczytywanie czytaj;
+public class Pilka extends Thread implements KeyListener{
+	//Wczytywanie czytaj;
 
 	public float dx,dy= 0.01f;
 	public float pilka_x=0;
 	public float pilka_y=0;
 	int zycia;
+	long time=0;
+	long time_dif=0;
 	public float r=0.1f;
 	//public float size_y=0.1f;
 	BufferedImage image;
 	int p;
-	
-	
+	boolean pause;
+	/**
+	 *konstruktor inicjujacy pilke, biory jej wspolzedne, zdjecie itp
+	 */
 	Pilka(){
-		image=Wczytywanie.get_pilka_image("image");
+		image=Wczytywanie.get_pilka_image();//("image");
 		pilka_x=Wczytywanie.get_pilka("x");
 		pilka_y=Wczytywanie.get_pilka("y");
 		zycia=(int)Wczytywanie.get_pilka("zycia");
 		r=Wczytywanie.get_pilka("r");
+		p=0;
+		pause=false;
 	}
 	
 
 	
 	
-	
+	/**
+	 * definiuje zmiane pozycji kulki
+	 */
 	public void move() {
 		pilka_x+=dx;
 		pilka_y+=dy;
@@ -40,12 +49,15 @@ public class Pilka implements KeyListener{
 	
 	
 	
-	
+	/**
+	 * do wczytywania jak kulka ma sie poruszac
+	 */
 	@Override
 	public void keyPressed(KeyEvent evt) {
 		// TODO Auto-generated method stub
 		int key=evt.getKeyCode();
-    	
+    	if(pause==false)
+    	{
         if (key == KeyEvent.VK_LEFT) {
             dx = (float) -0.01;
             System.out.println("cccccccccccccccc");
@@ -62,9 +74,24 @@ public class Pilka implements KeyListener{
         if (key == KeyEvent.VK_DOWN) {
             dy = (float)0.03;
         }
-       
+    	}
+        if (key == KeyEvent.VK_P) {
+         //f()
         	
-    	
+        	pause=!pause;
+        	System.out.println(pause);
+        	if(pause==true)
+        		time=System.currentTimeMillis();
+        	//if(dy==0)
+        	else
+        	{
+        		dy=(float) 0.01;
+        		time_dif=System.currentTimeMillis()-time;
+        	}
+        
+        }
+        	
+    	/*
 		  if (key == KeyEvent.VK_P) {
 		        	System.out.println("bbbbbbb");
 			  dy=p/100;
@@ -80,15 +107,18 @@ public class Pilka implements KeyListener{
 		        	
 				  p=1;
 			  }
-		  }
+		  }*/
    
 		  
 	}
-
+/**
+ * funkcja przywracajaca wartosci domyslne po puszczeniu klawisza
+ */
 	@Override
 	public void keyReleased(KeyEvent evt) {
 		int key=evt.getKeyCode();
-
+		if(pause==false)
+		{
 		 if (key == KeyEvent.VK_UP) {
 	            dy = 0.01f;
 	        }
@@ -103,18 +133,33 @@ public class Pilka implements KeyListener{
             dx = 0;
             
         }
+		}
+		else
+		{
+			dx=0;
+			dy=0;
+			
+		
+		}
+        /*
         if (key == KeyEvent.VK_P) {
         
-        	if(p==1)
-        
+        	if(p==0)
+        	{
         	dy=0;
+        	p=1;
+        	}
         else
+        {
         	dy=(float)0.01;
+        	p=0;
+        }
+        	
         }
        // else
-        //	dy=(float)0.01;
+        //	dy=(float)0.01;*/
         }
-
+	
 	//}
 
 	@Override
