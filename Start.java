@@ -40,7 +40,7 @@ int y=20;
  * @param s to nazwa klasy sterowanie na rzecz ktorej bedziemy wywolywac elemnty, wczytywac nick itp
  */
 
-	Start(Sterowanie s){
+	Start(Sterowanie s, JFrame f){
 		start=new JButton("START");
 		zasady=new JButton("ZASADY");
 		wyniki=new JButton("WYNIKI");
@@ -48,7 +48,7 @@ int y=20;
 		tekst=new TextArea();
 		//start.setSize(11, 11,11,11);//;(x++,y++);;
 		setLayout(new GridLayout(4, 1,10,10));
-		setPreferredSize(new Dimension(20,20));
+		//setPreferredSize(new Dimension(20,20));
 	//	this.add(tekst);
 		this.add(start);
 		this.add(zasady);
@@ -64,7 +64,7 @@ int y=20;
 				s.level=11;
 				
 			    // JOptionPane.showMessageDialog(s.f.getComponent(0), "Hello World");
-				s.gra();
+				s.gra(f,s);
 				start.setSize(x++,y++);
 				System.out.println("Do Something Clicked");
 				//this.

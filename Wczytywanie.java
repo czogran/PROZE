@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -35,7 +36,7 @@ public class Wczytywanie {
 	//List listWithNames = new LinkedList<>();
 	/** okresla obrazek ktory ma byc dokola*/
 	public BufferedImage image;
-	public String background; 
+	public String tlo_planszy; 
 	
 	String nazwa;
 	public static String  plansza;
@@ -104,6 +105,10 @@ public class Wczytywanie {
 		    //	foty[i]=this.get_image()
 		    	System.out.println(x1[i]+"   "+x2[i]+"    "+y1[i]+"     "+y2[i]);
 		    	//nazwa=e.getElementsByTagName("z").item(0).getTextContent();
+		    	if(Sterowanie.online==true)
+			    {
+			    	Klijent.wez_obraz(Sterowanie.socket,nazwa_fotek[i]);
+			    }
 		    }
 		    
 		  nList= doc.getElementsByTagName("ramka");   
@@ -115,8 +120,11 @@ public class Wczytywanie {
 		    size_y=Integer.parseInt(e.getElementsByTagName("size_y").item(0).getTextContent());
 		    
 		   
-		    background=e.getElementsByTagName("background").item(0).getTextContent();
-		   
+		    tlo_planszy=e.getElementsByTagName("background").item(0).getTextContent();
+		    if(Sterowanie.online==true)
+		    {
+		    	Klijent.wez_obraz(Sterowanie.socket, tlo_planszy);
+		    }
 		   
 		    
 		 } catch (Exception e) {
@@ -176,7 +184,7 @@ public class Wczytywanie {
 	public static BufferedImage get_pilka_image ()// (String szukana)
 	{
 		BufferedImage image = null;
-		String plansza;
+		String nazwa_obrazu;
 		NodeList nlist1;
 		
 	try {
@@ -195,8 +203,12 @@ public class Wczytywanie {
 		    Node nNode = nlist1.item(0);
 		    Element e=(Element) nNode;
 		  //x=e.getElementsByTagName("x1").item(0).;
-		    plansza=e.getElementsByTagName("image").item(0).getTextContent();
-		    File imageFile= new File (plansza);
+		    nazwa_obrazu=e.getElementsByTagName("image").item(0).getTextContent();
+		    if(Sterowanie.online==true)
+			{
+				Klijent.wez_obraz(Sterowanie.socket,nazwa_obrazu);
+			}
+		    File imageFile= new File (nazwa_obrazu);
 		    //File inputFile = new File(plansza);
 			image = ImageIO.read(imageFile);
 		   // plansza=e.getElementsByTagName(szukana).item(0).getTextContent();
@@ -211,14 +223,107 @@ public class Wczytywanie {
 		return image;
 	}
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * do wczytywania obrazu monety
+	 */
+	public static BufferedImage wez_moneta_obraz ()// (String szukana)
+	{
+		BufferedImage obraz = null;
+		String plansza;
+		NodeList nlist1;
+	try {	
+		File inputFile;
+
+			if(Sterowanie.online==false)
+			{
+				 inputFile = new File("sterowanie.txt");//("plansza.txt");
+			}
+			else
+				 inputFile = new File("sterowanie_klijent.txt");//("plansza.txt");
+
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		    DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+		    Document doc = dBuilder.parse(inputFile);
+		    doc.getDocumentElement().normalize();
+		
+		    
+
+		    System.out.println(doc.getDocumentElement().getNodeName());
+		     nlist1 = doc.getElementsByTagName("moneta");
+		   
+		    Node nNode = nlist1.item(0);
+		    Element e=(Element) nNode;
+		  //x=e.getElementsByTagName("x1").item(0).;
+		    plansza=e.getElementsByTagName("obraz").item(0).getTextContent();
+		    if(Sterowanie.online==true&&Moneta.pobrane==false)
+			{
+		    	Moneta.pobrane=true;
+				Klijent.wez_obraz(Sterowanie.socket,plansza);
+			}
+		    File imageFile= new File (plansza);
+		    //File inputFile = new File(plansza);
+			obraz = ImageIO.read(imageFile);
+		   // plansza=e.getElementsByTagName(szukana).item(0).getTextContent();
+		    //System.out.println(x);
+		    //System.out.println(e.getAttribute("x1"));
+		 } catch (Exception e) {
+		    e.printStackTrace();
+		 }
+		return obraz;
+	}
+	
+	public static int wez_liczbe_leveli ()// (String szukana)
+	{
+		int liczba_leveli=0;
+		NodeList nlist1;
+	try {	
+		File inputFile;
+
+			if(Sterowanie.online==false)
+			{
+				 inputFile = new File("sterowanie.txt");//("plansza.txt");
+			}
+			else
+				 inputFile = new File("sterowanie_klijent.txt");//("plansza.txt");
+
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		    DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+		    Document doc = dBuilder.parse(inputFile);
+		    doc.getDocumentElement().normalize();
+		
+		  
+		    String szukana;
+		    //nlist1
+		    szukana= doc.getElementsByTagName("liczba_leveli").item(0).getTextContent();
+			  
+		     liczba_leveli=Integer.parseInt(szukana);
+		   //  System.out.println("liczba leweli"+liczba_leveli);
+		   
+		 } catch (Exception e) {
+		    e.printStackTrace();
+		 }
+		return liczba_leveli;
+	}
+	
+	
 	/**
 	 * funkcja sworzona po to by jak bedzie potrzeba zamienic zdjecie bedace w klasie wczytywanie na inne
 	 * @param nazwa nazwa
 	 */
 	
 	public void get_image( String nazwa) {
-		File imageFile= new File (nazwa);
 		
+		File imageFile= new File (nazwa);
+		//JOptionPane.showMessageDialog(null,Sterowanie.online);
+
 		try {
 			image = ImageIO.read(imageFile);
 		} catch (IOException e) {
@@ -271,10 +376,22 @@ public class Wczytywanie {
 	 * @param nr_levelu int mowiacy nam dla ktorego levelu mamy brac nazwe planszy
 	 * @return plansza nazwa pliku tekstowego dla danego levelu
 	 */
-	public static String get_plansza_name (int nr_levelu)
+	public static String wez_plansza_nazwa (int nr_levelu)
 	{
 		String szukaj,plansza="aa";
+		
+		if(Sterowanie.online==true)
+		{
+		plansza="plansza_klijent.txt";
+	
+		}
+		else
+		{
+			//JOptionPane.showMessageDialog(null,Sterowanie.online);
+
+		//String szukaj,plansza="aa";
 		//szukaj="level"+nr_levelu;
+		
 		szukaj= new String("level"+nr_levelu);
 	    System.out.println(szukaj+"       szukaj");
 
@@ -293,7 +410,9 @@ public class Wczytywanie {
 			    e.printStackTrace();
 			 }
 	    System.out.println(plansza+"        get plansza name");
-
+		}
+	
+		
 		return plansza;
 	}
 	
@@ -305,6 +424,8 @@ public class Wczytywanie {
 			public static void zapis(String nick_gracza, int punkty)
 			{
 				NodeList nList;
+				if(Sterowanie.online==false)
+				{
 				try {
 			         File inputFile = new File("wyniki.txt");
 
@@ -395,6 +516,15 @@ public class Wczytywanie {
 			      } catch (Exception e) {
 			         e.printStackTrace();
 			      }
+				}
+				else
+				{
+					//JOptionPane.showMessageDialog(null,"nazwa_zdjecia");
+
+					Klijent.wyslij_wynik(Sterowanie.socket, nick_gracza, punkty);
+					//TODO zapis na serwerze
+				}
+					//Klijent.
 			   }
 			
 			
@@ -404,6 +534,11 @@ public class Wczytywanie {
 	 */
 		public static void wyniki_pisz(Graphics g)
 		{
+			if(Sterowanie.online==true)
+			{
+				Klijent.wez_wynik(Sterowanie.socket);
+			}
+			
 			NodeList nList;
 			try {
 		         File inputFile = new File("wyniki.txt");
@@ -427,7 +562,7 @@ public class Wczytywanie {
 				   // for (int i=0;i<nList.getLength();i++)
 				for (int i=nList.getLength();i>0;i--)
 				    {
-					
+					System.out.print("pappaappapa");
 				    	e=(Element)nList.item(i-1);
 				    	wynik=Integer.parseInt(e.getTextContent());
 				    	nick_gracza=new String( e.getAttribute("nick"));

@@ -71,6 +71,49 @@ public class Klijent {
       }
       }
 	
+	
+	public static void wez_wynik (Socket serverSocket){
+	      try{
+	  		System.out.println("wez_s");
+
+	          OutputStream os = serverSocket.getOutputStream();
+	          PrintWriter pw = new PrintWriter(os, true);
+	          pw.println("wez_wynik");
+	          InputStream is = serverSocket.getInputStream();
+	          BufferedReader br = new BufferedReader(new InputStreamReader(is));
+	          //String settings = br.readLine();
+	          String wiadomosc=br.readLine();
+	          if (wiadomosc.contains("wyniki"))
+	          {
+	          	wiadomosc=wiadomosc.substring(6);
+	          	PrintWriter out1 = new PrintWriter("wyniki.txt");
+	          	System.out.println("wez_s3");	
+	          	out1.println(wiadomosc);        
+	          	out1.close();
+	          }
+	      }
+	      catch (IOException e){
+	      
+	          System.out.println(e);
+	      }
+	      }
+	
+	public static void wyslij_wynik (Socket serverSocket,String nick,int punkty){
+	      try{
+	  		//System.out.println("wez_s");
+
+	          OutputStream os = serverSocket.getOutputStream();
+	          PrintWriter pw = new PrintWriter(os, true);
+	          pw.println("wyslij_wynik"+nick+"marker"+punkty);
+	         
+	      }
+	      catch (IOException e){
+	      
+	          System.out.println(e);
+	      }
+	      }
+	
+	
 	public static void wez_poziom (Socket serverSocket,int nr_poziomu){
       try{
   		System.out.println("wez_s");
@@ -97,9 +140,22 @@ public class Klijent {
       }
       }
 	
+	public static void koniec (Socket serverSocket){
+	      try{
+	  	
+	          OutputStream os = serverSocket.getOutputStream();
+	          PrintWriter pw = new PrintWriter(os, true);
+	          pw.println("koniec");
+	      }
+	      catch (IOException e){
+	          
+	          System.out.println(e);
+	      }
+	}
+	
 	public static void wez_obraz (Socket serwerSocket,String nazwa_zdjecia){
       try{
-  		System.out.println("wez_s");
+  		//System.out.println("wez_s");
 
           OutputStream os = serwerSocket.getOutputStream();
           PrintWriter pw = new PrintWriter(os, true);
@@ -113,14 +169,13 @@ public class Klijent {
           {
              
           	wiadomosc=wiadomosc.substring(7);
-              System.out.println(wiadomosc);
+            //  System.out.println(wiadomosc);
 
           	byte[] zdjecieTablicaBitow = Base64.getDecoder().decode(wiadomosc);
 
           //	Base64.decodeToFile(wiadomosc,nazwa_zdjecia);
           	//byte[] imageByteArray = Base64.decodeBase64(wiadomosc);
-          	 FileOutputStream zdjeciePlikWyjsciowy = new FileOutputStream(
-                      "a"+nazwa_zdjecia);
+          	 FileOutputStream zdjeciePlikWyjsciowy = new FileOutputStream(nazwa_zdjecia);
 
           	 zdjeciePlikWyjsciowy.write(zdjecieTablicaBitow);
 

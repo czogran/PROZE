@@ -15,14 +15,14 @@ public class Pilka extends Thread implements KeyListener{
 	public float dx,dy= 0.01f;
 	public float pilka_x=0;
 	public float pilka_y=0;
-	int zycia;
+	public static int zycia;
 	long time=0;
 	long time_dif=0;
-	public float r=0.1f;
+	public static float r=0.1f;
 	//public float size_y=0.1f;
-	BufferedImage image;
+	static BufferedImage image;
 	int p;
-	boolean pause;
+	static boolean pause;
 	/**
 	 *konstruktor inicjujacy pilke, biory jej wspolzedne, zdjecie itp
 	 */
@@ -74,6 +74,12 @@ public class Pilka extends Thread implements KeyListener{
         if (key == KeyEvent.VK_DOWN) {
             dy = (float)0.03;
         }
+        //tylko do testow
+        if (key == KeyEvent.VK_1) {
+           Klijent.koniec(Sterowanie.socket);
+           System.out.println("test konca");
+        	// dy = (float)0.03;
+        }
     	}
         if (key == KeyEvent.VK_P) {
          //f()
@@ -81,8 +87,12 @@ public class Pilka extends Thread implements KeyListener{
         	pause=!pause;
         	System.out.println(pause);
         	if(pause==true)
+        		{
         		time=System.currentTimeMillis();
-        	//if(dy==0)
+        		
+        		Sterowanie.sklep();
+        		}
+        		//if(dy==0)
         	else
         	{
         		dy=(float) 0.01;

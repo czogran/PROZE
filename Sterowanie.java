@@ -15,79 +15,118 @@ import java.net.UnknownHostException;
 import java.nio.channels.SocketChannel;
 import java.rmi.ConnectIOException;
 
+import javax.print.attribute.standard.JobState;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import java.net.*;
+//import klijent.InetAddress;
 import kulka.Klijent;
 public class Sterowanie  implements ComponentListener{
-	public Board board;//=new Board();
+	public static Board board;//=new Board();
+	public static Sklep sklep;
 	public Klijent klijent;
-	JFrame f;
-	public Start start;
+	static JFrame f;
+	public static Start start;
 	//JButton start;
 	JButton zasady;
 	JButton wyniki;
 	public JPanel kontener;
-	Socket socket=null;
+	static Socket socket=null;
     Container contentPane;
   //  String plansza;//="plansza.txt";
     boolean scanning=true;
-
+    public static boolean online;
+    InetAddress ip;
 	
 	public int level=0;
 	public Sterowanie()  {
 		 
-	
-		
 		try {
-			socket=new Socket("127.0.0.1",2239);
+
+			ip = InetAddress.getLocalHost();
+			System.out.println("Current IP address : " + ip.getHostAddress());
+			socket=new Socket(ip.getHostAddress(),2240);
+			//socket=new Socket("127.0.0.1",2239);
+			online=true;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			System.out.print("2222");
-
+			online=false;
 			//e.printStackTrace();
 		}
-		finally
+		
+		if (online==true)
 		{
-			System.out.print("111");
+			Klijent.wez_sterowanie(socket);
 		}
-
-		//klijent=new Klijent("127.0.0.1",2239);
-	//	Klijent.wez_poziom(socket,0);
-		//plansza=Wczytywanie.get_plansza_name(0);
+		
+		JOptionPane.showMessageDialog(null,online);
+	
 		f=new JFrame();
-		//f.setSize(czytaj.size_x,board.czytaj.size_y);
-		start=new Start(this);
+		start=new Start(this,f);
 		f.add(start);
 		f.setVisible(true);
 		
 		
-			board=new Board(f,this);
+		//board=new Board(f,this);
 		
-		board.setVisible(false);
-		//Wczytywanie.zapis();
+	//	board.setVisible(false);
+	//	Wczytywanie.zapis();
 		
 		f.addComponentListener(this);
-		f.addKeyListener(board.pilka);
+		//f.addKeyListener(board.pilka);
 		f.setLocation(100, 100);
-		board.setVisible(true);
+		f.setSize(400, 400);;
+	//	board.setVisible(true);
 		   f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 	}
 	
-	public void gra()
+	public void gra(JFrame ff,Sterowanie ss)
 	{
 		f.requestFocus();
 		start.setVisible(false);
+		//board=new Board(f,this);
+	//	Wczytywanie.wez_plansza_nazwa(0);
+		board=new Board(ff,ss);
+		f.addKeyListener(board.pilka);
 		board.setVisible(true);
 		board.czas=System.currentTimeMillis();
+		//f.addKeyListener(board.pilka);
 		f.add(board);  
 	}
-	public void koniec()
+	public static void sklep()
+	{
+		f.requestFocus();
+		sklep =new Sklep();
+		board.setVisible(false);
+		sklep.setVisible(true);
+		f.add(sklep);
+		//board=new Board(f,this);
+		
+//
+	//	board.setVisible(true);
+		//f.add(board);  
+	}
+	public static void zamknij_sklep()
+	{
+		f.requestFocus();
+		//Sklep sklep =new Sklep(f);
+		
+		sklep.setVisible(false);
+	//	board.setVisible(false);
+		board.setVisible(true);
+		
+		
+		f.add(board);  
+	}
+	public static void koniec()
 	{
 		f.requestFocus();
 		start.setVisible(true);
-		board.setVisible(false);
+		//board.setVisible(false);
 		//board.czas=System.currentTimeMillis();
 		f.add(start);  
 	}
